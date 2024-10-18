@@ -1,27 +1,50 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Office List</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Office List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
-    <div class="container p4 m4">
-      <div class="row">
-        <div class="col-2">Office Code</div>
+<h1 class="">Office List ::</h1>
+<hr>
+<div class="container p4 m4">
+    <div class="row ">
+        <div class="col-1">Office Code</div>
         <div class="col-2">City</div>
-        <div class="col-4">Address</div>
+        <div class="col-3">Address</div>
         <div class="col-2">Country</div>
         <div class="col-2">Phone#</div>
-      </div>
-      <div class="row" th:each="office : ${offices}">
-        <div class="col-2" th:text="${office.officeCode}"></div>
+        <div class="col-2">Update/Delete</div>
+    </div>
+    <div class="row p4" th:each="office : ${offices}">
+        <div class="col-1">
+            <a th:href="@{'/offices?OfficeCode='+${office.officeCode}}">
+                <span th:text="${office.officeCode}"></span>
+            </a>
+        </div>
         <div class="col-2" th:text="${office.city}"></div>
-        <div class="col-4" th:text="${office.addressLine1 + office.addressLine2}"></div>
+        <div class="col-3" th:text="${office.addressLine1 + office.addressLine2}"></div>
         <div class="col-2" th:text="${office.country}"></div>
         <div class="col-2" th:text="${office.phone}"></div>
-      </div>
+        <div class="col-2">
+            <a th:href="@{'/offices/delete-office?OfficeCode='+${office.officeCode}}">
+                <button style="background-color: lightsalmon">delete</button>
+            </a>
+            <a th:href="@{'/offices/update_form?OfficeCode='+${office.officeCode}}">
+                <button style="margin-left: 10px; background-color: aqua">update</button>]
+            </a>
+        </div>
     </div>
+</div>
+<hr>
+<a href="/">
+    <button>[Home]</button>
+    <a href="/offices/office_form">
+        <button>Add New Office</button>
+    </a>
+</a>
 </body>
 </html>
