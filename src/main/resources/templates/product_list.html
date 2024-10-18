@@ -14,10 +14,11 @@
         <h1 class="">Product List ::</h1>
     </div>
     <div class="col-8 ml-4 pt-2">
-    <span style="margin-left: 100px"></span>
+        <span style="margin-left: 100px"></span>
 
         <form action="/products/search-product" method="get">
-            <input type="text" name="searchParam" placeholder="Enter text to search product form any field">
+            <input type="text" name="searchParam" th:value="${param.searchParam}"
+                   placeholder="Enter text to search product form any field">
             <input type="submit" th:value=" Search ">
         </form>
     </div>
@@ -25,8 +26,8 @@
     <div class="col-4 pt-2">
         <form action="/products/search-product-by-price" method="get">
             Filter By Price:
-            <input type="number" name="lowerPrice" min="1.0" max="9999.0">
-            <input type="number" name="upperPrice" min="1.0" max="9999.0">
+            <input type="number" name="lowerPrice" min="1.0" max="9999.0" th:value="${param.lowerPrice}">
+            <input type="number" name="upperPrice" min="1.0" max="9999.0" th:value="${param.upperPrice}">
             <input type="submit" th:value="search">
         </form>
     </div>
@@ -34,14 +35,19 @@
 
 <hr>
 <div class="container p4 m4">
-    <div class="row ">
+    <!-- Uncomment this block if you want to show a message when no products are found -->
+    <div class="row h3 text-danger" th:if="${#lists.isEmpty(products)}">
+        <span th:text="${param.searchParam + ' does not exist!!'}"></span>
+    </div>
+
+    <div class="row" th:if="${products != null and !#lists.isEmpty(products)}">
         <div class="col-1">Product Code</div>
         <div class="col-2">Product name</div>
         <div class="col-1">Product Line</div>
         <div class="col-1">Product Scale</div>
         <div class="col-2">Product Vendor</div>
         <div class="col-2">Product Price</div>
-        <div class="col-2">Update/delete</div>
+        <div class="col-2">Update/Delete</div>
     </div>
     <div class="row p4" th:each="p : ${products}">
         <div class="col-1">
@@ -56,11 +62,10 @@
         <div class="col-2" th:text="${p.buyPrice}"></div>
         <div class="col-2">
             <a th:href="@{'/products/delete-product?productCode='+${p.productCode}}">
-                <button style="background-color: lightsalmon">delete</button>
+                <button style="background-color: lightsalmon">Delete</button>
             </a>
-            <a th:href="@{'/pornput/update_product?productCode='+${p.productCode}}">
-                <button style="margin-left: 10px; background-color: aqua">update</button>
-                ]
+            <a th:href="@{'/products/update_product?productCode='+${p.productCode}}">
+                <button style="margin-left: 10px; background-color: aqua">Update</button>
             </a>
         </div>
     </div>
@@ -68,9 +73,9 @@
 <hr>
 <a href="/">
     <button>[Home]</button>
-    <a href="/products/add_product">
-        <button>Add New Product</button>
-    </a>
+</a>
+<a href="/products/add_product">
+    <button>Add New Product</button>
 </a>
 </body>
 </html>

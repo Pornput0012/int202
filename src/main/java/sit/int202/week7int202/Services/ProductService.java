@@ -1,6 +1,9 @@
 package sit.int202.week7int202.Services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import sit.int202.week7int202.entities.Product;
 import sit.int202.week7int202.repositories.ProductRepository;
@@ -36,9 +39,12 @@ public class ProductService {
             lowerPrice = upperPrice;
             upperPrice = temp;
         }
-        System.out.println(BigDecimal.valueOf(lowerPrice) + " " +  BigDecimal.valueOf(upperPrice));
+        System.out.println(BigDecimal.valueOf(lowerPrice) + " " + BigDecimal.valueOf(upperPrice));
         return productRepository.findProductsByBuyPriceGreaterThanAndBuyPriceLessThanOrderByBuyPriceAsc(
                 BigDecimal.valueOf(lowerPrice), BigDecimal.valueOf(upperPrice));
     }
 
+    public Page<Product> findAll(Pageable pageable) {
+        return productRepository.findAll(pageable);
+    }
 }

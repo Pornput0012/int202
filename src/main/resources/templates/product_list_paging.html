@@ -3,44 +3,16 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Office List</title>
+    <title>Product List Paging</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
 
-<div class="row">
-    <div class="col-4">
-        <h1 class="">Product List ::</h1>
-    </div>
-    <div class="col-8 ml-4 pt-2">
-        <span style="margin-left: 100px"></span>
-
-        <form action="/products/search-product" method="get">
-            <input type="text" name="searchParam" th:value="${param.searchParam}"
-                   placeholder="Enter text to search product form any field">
-            <input type="submit" th:value=" Search ">
-        </form>
-    </div>
-
-    <div class="col-4 pt-2">
-        <form action="/products/search-product-by-price" method="get">
-            Filter By Price:
-            <input type="number" name="lowerPrice" min="1.0" max="9999.0" th:value="${param.lowerPrice}">
-            <input type="number" name="upperPrice" min="1.0" max="9999.0" th:value="${param.upperPrice}">
-            <input type="submit" th:value="search">
-        </form>
-    </div>
-</div>
-
-<hr>
 <div class="container p4 m4">
-    <!-- Uncomment this block if you want to show a message when no products are found -->
-    <div class="row h3 text-danger" th:if="${#lists.isEmpty(products)}">
-        <span th:text="${param.searchParam + ' does not exist!!'}"></span>
-    </div>
+    <p th:text="${page.number}"></p>
+    <div class="row" th:if="${page.content != null and !#lists.isEmpty(page.content)}">
 
-    <div class="row" th:if="${products != null and !#lists.isEmpty(products)}">
         <div class="col-1">Product Code</div>
         <div class="col-2">Product name</div>
         <div class="col-1">Product Line</div>
@@ -49,7 +21,7 @@
         <div class="col-2">Product Price</div>
         <div class="col-2">Update/Delete</div>
     </div>
-    <div class="row p4" th:each="p : ${products}">
+    <div class="row p4" th:each="p : ${page.content}">
         <div class="col-1">
             <a th:href="@{'/products?productCode='+${p.productCode}}">
                 <span th:text="${p.productCode}"></span>
@@ -70,6 +42,14 @@
         </div>
     </div>
 </div>
+<hr>
+<span th:each="index : ${#numbers.sequence(1,page.totalPages)}">
+    <a th:if="${(index - 1) != page.number} " th:href="@{/products/paging(page=${index}-1, size=5)}"
+       th:text="${index}"></a>
+
+    <button th:if="${(index - 1)  == page.number}" disabled th:text="${index}"/>
+</span>
+
 <hr>
 <a href="/">
     <button>[Home]</button>

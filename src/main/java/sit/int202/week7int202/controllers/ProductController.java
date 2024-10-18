@@ -1,6 +1,7 @@
 package sit.int202.week7int202.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +30,7 @@ public class ProductController {
     }
 
     @GetMapping("/search-product")
-    public String searchProduct(@RequestParam String searchParam, Model model) {
+    public String searchProduct(@RequestParam(required = false) String searchParam, Model model) {
         List<Product> products = productService.findProductByText(searchParam);
         model.addAttribute("products", products);
         return "product_list";
@@ -43,5 +44,14 @@ public class ProductController {
 
         model.addAttribute("products", products);
         return "product_list";
+    }
+
+    @GetMapping("/paging")
+    public String paging(@RequestParam(defaultValue = "0") int page,
+                         @RequestParam(defaultValue = "10") int size,
+                         Model model) {
+
+        model.addAttribute("page", productService.findAll(PageRequest.of(page,size)));
+        return "product_list_paging";
     }
 }
